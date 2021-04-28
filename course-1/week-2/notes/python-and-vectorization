@@ -1,0 +1,52 @@
+-- Vectorization --
+
+Important for deep learning because computations must be as efficient as possible.
+	-For loop is obscenely inefficient (~100s of times slower)
+
+GPUs are better at CPUs for parallelization for computations (both are good though).
+	-Called SIMD (single instruction multiple data)
+
+===========================================
+-- Vectorizing Logistic Regression --
+
+When vectorizing for deep learning, the convention is to stack all your values horizontally (if as a vector, it will be a row vector).
+
+===========================================
+-- Vectorizing Logistic Regression's Gradient Output --
+
+import numpy as np
+
+z = np.dot(w.T,X) + b
+A = sigmoid(z)
+dz = A - Y
+db = (1/m) * np.sum(dZ)
+dw = (1/m) * X * dz.t
+
+w -= alpha * dw
+b -= alpha * db
+
+===========================================
+-- Broadcasting in Python --
+
+Broadcasting is a functionality in python that duplicates an addend (secondary) along rows/columns in order to match the addend dimensions.
+When adding (m,n) and (1,n) [or m,1] matrices, python will transform the second addend into an (m,n) matrix to be added.
+
+cal = A.sum(axis=0) 
+	-Sums vertically
+
+percentage = 100 * A / (cal.reshape(1,4))
+	-Calculates percentages of values via columns
+
+===========================================
+-- A Note on Python/Numpy Vectors --
+
+Don't use "rank 1 arrays" with vague dimensions (e.g. (5,)), they can introduce bugs via counterintuitive interactions. Always make your dimensions explicit ((5,1), (1,5))
+
+a = np.random.randn(5) BAD
+a = np.random.randn(5,1) GOOD
+a = np.random.randn(1,5) GOOD
+assert(a.shape == (5,1)) <== checks the dimensions
+a = a.reshape((5,1)) <== transforms from rank 1 arrays
+
+===========================================
+

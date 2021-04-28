@@ -1,0 +1,47 @@
+-- Train / Dev / Test Sets --
+
+Applied machine learning is very iterative; lots of trial and error 
+
+!Intuition of hyperparameters generally do *not* carry over from one area of applied machine learning to another 
+
+Moderate data sets (<=10^5) ===> ~60%/20%/20% split of train/dev/test
+With big data sets (+10^6) ===> ~98%/1%/1% split of train/dev/test
+
+!Make sure the test and dev sets come from the same distribution.
+
+Might be ok to not have a test set?
+
+===============================================
+-- Bias / Variance-
+
+Key values: train set error & dev set error
+
+High Variance
+	-Low train set error
+	-High (relative) dev set error
+
+High Bias:
+	-High train set error
+	-High dev set error
+
+^This is all relative optimal (base) error
+
+===============================================
+-- Basic Recipe For Machine Learning --
+
+-High bias? (training data performance)
+	-Bigger network (more hidden layers/nodes)
+	-Train longer
+	-Different NN architecture
+
+-High variance? (dev set performance)
+	-More data
+	-Regularization
+	-Different NN architecture
+
+In the big data era, by:
+	-Structuring a bigger network
+	-Getting more data
+you can control bias or variance without influencing the other.
+
+===============================================

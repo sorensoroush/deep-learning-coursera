@@ -1,0 +1,59 @@
+-- What is a neural network? --
+
+
+Linear regression can be written as a neural network, although it would be a very simple one (single neuron)
+
+*-ReLU function (Rectified Linear Unit) function is common in deep learning: a straight line that "takes off" (is flat at the start)
+
+Every neuron in a network can be a slightly non-linear function like ReLU.
+
+The layers (input + hidden) are "density connected", because every input is connect to every hidden unit.
+
+==================================================
+-- Supervised learning with neural networks --
+
+
+Almost all the economic value created by neural networks are through supervised learning. One of the most lucrative is online advertising.
+
+Computer vision has made huge strides thanks to deep learning; speech recognition, photo tagging, machine translation, autonomous driving. 
+
+Standard NN: Real estate, online advertising
+CNN: Photo tagging
+RNN: Speech recognition, machine translation
+Custom/complex hybrid: self-driving cars
+
+CNN: for image data (block-like)
+RNN: for sequential data (single stream)
+
+Structured data: tables, values, information
+Unstructured data: sound, image, text (easy for people, very difficult for computers)
+^Learning about both in this course
+
+===================================================
+-- Why deep learning is taking off --
+
+
+Traditional learning algorithm didn't know what to do with huge amount of data. Recently so much more data is available thanks to digitalization.
+Neutal networks make much better use of huge amounts of data. 
+
+!- "Scale drives deep learning progress", both with NN size and data size (specifically labeled data).
+-Likewise, with small training sets the ordering is not well defined and dependent on hand-engineering
+
+Big algorithmic innovations:
+-Switching from sigmoid functions to ReLU functions makes gradient descent much faster, because derivative doesn't approach 0 with large data sets.
+
+Computation has advanced so experimental iterations progress much more quickly.
+
+===================================================
+-- Heroes of Deep Learning (Geoffrey Hinton interview) --
+
+Lashey's experiment?
+Winograd's thesis
+restricted/derestricted Boltzmann machines
+Bayesian learning
+Spike-timing-dependent plasticity
+Fast weights?
+FIFO learning?
+Wegstein algorithm
+generative adversial nets
+sparsity and slow features

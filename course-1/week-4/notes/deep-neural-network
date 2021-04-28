@@ -1,0 +1,69 @@
+-- Deep L-layer Neural Network --
+
+L = # of layers
+n^[l] = # units in layer in l
+a^[l] = activations in layer in l
+=================================================
+-- Getting your Matrix Dimensions Right --
+
+W[l]: (n[l], n[l-1])
+b[l]: (n[l], 1)
+
+The derivatives should be the same size as the derived matrices.
+
+Z/A[l]: (n[l], m)
+X: (n[0], m)
+
+=================================================
+-- Why Deep Representations? --
+
+In deep neural networks, every layer builds upon the last to compute more and more complex features (i.e edges ==> parts of face ==> face patterns)
+
+!- When attempting to compute a function, "narrow" deep networks are more computationally efficient than "wide" shallow networks
+	-To compute x1 XOR x2 XOR ... xn you would need: logn layers for a deep network, and 2^n nodes for a 2-layer shallow network
+
+=================================================
+-- Building Blocks of Deep Neural Networks --
+
+Forward Propagation:
+	-Input: a[l-1]
+	-Output: a[l]
+	-Cache: z[l]
+
+Backward Propagation:
+	-Input: da[l], z[l]
+	-Output: da[l-1], dw[l], db[l]
+
+*- Cache is "storing the data" but z[l] is a convenient way to return the values of W[l] and b[l]
+
+Can compute da[0] (with respect to input features) but this is not useful for supervised learning problems
+
+=================================================
+-- Forward and Backward Propagation --
+
+dz[l] = da[l] x g[l]'(z[l])
+dw[l] = dz[l] * a[l-1].T
+db[l] = dz[l]
+da[l-1] = W[l].T * dz[l]
+
+dz[l] = W[l+l] * dz[l+1] x g[l]'(z[l])
+
+da[L] = -(y/a) + ((1-y)/(1-a))
+
+=================================================
+-- Parameters vs Hyperparameters --
+
+Examples of hyperparameters:
+-learning rate (alpha)
+-# of iterations
+-# hidden layers (L)
+-# hidden units (n[1],n[2])
+-choice of activation function
+
+Later:
+-momentum, minibatch size, regular junctions
+
+Applied deep learning is a very emperical process:
+	-Try out a lot of things and see what works
+
+=================================================

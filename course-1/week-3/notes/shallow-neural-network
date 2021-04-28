@@ -1,0 +1,133 @@
+=======================================================================================
+-- Neural Network Representation --
+
+InputLater ==> HiddenLayer ==> OutputLayer
+-Hidden layer are not seen in the training set, to describe the name
+
+^ This is called a 2-layer neural network, because the input layer is not counted
+
+
+a^[0] = x refers to the inputs of the input layer
+a^[1] refers to the activations of the first hidden layer
+w^[1] and b^[1] are parameters for the first hidden layer
+
+=======================================================================================
+-- Computing a Neural Network's Output --
+
+Every node in a neural network has two steps:
+	- z is computed by a weight (w), an input (x), and a bias (b)
+	- a is computed by using a sigmoid function on z
+
+a^[l]v(i)
+	-l means layer
+	-i means node # of layer
+
+=======================================================================================
+-- Vectorizing Across Multiple Examples --
+
+a^[l]^(j)
+	-l means layer
+	-j means example #
+
+Z[1] = W[1]X + b[1]
+A[1] = sigmoid(Z[1])
+Z[2] = W[2]X + b[2]
+A[2] = sigmoid(Z[2])
+
+In Z/A:
+	-Horizontal refers to different training examples
+	-Vertical refers to different nodes
+
+=======================================================================================
+-- Activation Functions --
+
+Possible functions
+	-Sigmoid function
+		- a = sigmoid(z) = 1 / (1 - e^-z)
+		-Output values between 0 and 1
+		-Good for output layer when using binary classification
+	-Hyperbolic tangent function	
+		- a = tanh(z) = (e^z - e^-z) / (e^z + e^-z)
+		-Output values between -1 and 1
+		-Is better than the sigmoid function (except output layer) because the output values have a 0 mean
+	-Rectified linear unit (ReLU)
+		- a = max(0,z)
+		-Most common activation function for hidden layers
+		-Derivative does not approach 0, so speeds up learning
+		-One downside is that the derivative is 0 when z < 0
+	-Leaky ReLU
+		- a = max(0.01,z)
+		-Same as ReLU but is a slightly positive sloped line <0 rather than a flat line
+
+=======================================================================================
+-- Why do you need non-linear activation functions? --
+
+If you don't use them, yhat will be the result of a linear function of the inputs.
+	-Hidden layers become redundant, because the neural network as a whole is merely linear
+
+Linear (identity) activation function is only useful as an output function when using linear regression via machine learning
+
+=======================================================================================
+-- Gradient Descent for Neural Networks --
+
+Parameters (1 hidden layer): 
+	-W[1] (n[1], n[0])
+	-b[1] (n[1], 1)
+	-W[2] (n[2], n[1])
+	-b[2] (n[2], 1)
+
+Nodes counts: 
+	-n[0] (input)
+	-n[1] (hidden)
+	-n[2] (output)
+
+Cost function: 
+	-J(W[1],b[1],W[2],b[2]) = (1/m) * sum(lossFunction(yhat,y))
+
+Gradient Descent:
+	-Repeat:
+		-Compute predictions for (yhat(i)...yhat(m))
+		-Compute derivatives (dW[1],db[1],dW[2],db[2])
+		-Update parameters:
+			-W[1] = W[1] - alpha * dW[1]
+			-b[1] = b[1] - alpha * db[1]
+			-W[2] = W[2] - alpha * dW[2]
+			-b[2] = b[2] - alpha * db[2]
+
+Forward Propagation:
+	-Z[1] = W[1]X + b[1]
+	-A[1] = g(Z[1])
+	-Z[2] = W[2]A[1] + b[2]
+	-A[2] = g(Z[2])
+
+Back Propagation:
+	-dZ[2] = A[2] - Y
+	-dW[2] = (1/m) * dZ[2] * A[1].T
+	-db[2] = (1/m) * np.sum(dZ[2], axis = 1, keepdims = True) ||| axis = 1 sums horizontally (along the rows), keepdims=True prevents rank 1 arrays
+	-dZ[1] = W[2].T * dZ[2] x(element wise product) g[1]'(Z[1])
+	-dW[1] = (1/m) * dZ[1] * X.T
+	-db[1] = (1/m) * np.sum(dZ[1], axis = 1, keepdims = True)
+
+=======================================================================================
+-- Backpropagation Intuition --
+
+L(a,y) = -y * log(a) - (1-y) * log(1-a)
+	-taking the derivatives of this function with respect to (a), or input parameters, leads you to the necessary gradient derivatives
+
+da = -(y/a) + ((1-y) / (1-a))
+dz = da * g'(z)
+dw = dz * x
+db = dz
+
+In supervised learning, you don't take the derivative with respect x (the training examples)
+
+W[2] ==> (n[2],n[1])
+Z[2]/dZ[2] ==> (n[2],1)
+Z[1]/dZ[1] ==> (n[1],1)
+
+=======================================================================================
+-- Random Initialization --
+
+It is important to randomly initialize weights because, if the weights are all equal then the nodes will all compute the same function and the derivatives will be identical (resulting in gradient descent performing identical updates).
+
+It is also important to multiply the random values by a small number (like 0.01) because the smaller the number the larger the derivative of the tanh/sigmoid function; whereas if the initializations are large the derivative will have small values and gradient descent will be very slow.

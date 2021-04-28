@@ -1,0 +1,57 @@
+-- Binary Classifation --
+
+Logistic regression is for binary classification
+
+*- Computers store images in 3 pixel x pixel matrices: 3 rbg colors
+
+==========================================
+-- Logistic Regression --
+
+y = sigmoid(wT * x + b)
+
+In neural networks, it's easier to keep w and b separate as parameters for the sigmoid function. (No x0 = 1 convention like in ML course).
+
+==========================================
+-- Logistic Regression Cost Function --
+
+Squared error function is not ideal for logistic regression because it leads to local optima (hard to optimize).
+
+L(yh,y) = -(y * log(yh) + (1-y) * log(1-y))
+If y=1: -log(yh) <=== want log(yh) to be as big as possible (want yh large)
+If y=0: -log(1-yh) <=== want log(1-yh) to be as big as possible (want yh small)
+
+!Loss function computes the error for a single training example
+!Cost function computes the average of the loss function of the entire training set (applied to the parameters)
+
+==========================================
+-- Gradient Descent --
+
+Want to find w,b that minimize J(w,b)
+
+!Convex function is important for attempting to minimize a function
+	-why we use the logistic regression cost function
+
+-Optimize w by continually subtracting w by the derivative of the cost function with respect to w, multiplied by the learning rate alpha.
+	-Same with b, just with respect with b
+
+==========================================
+-- Computation Graph --
+
+A flowchart of the variables of a function in its computations relative to each other.
+
+==========================================
+-- Derivatives in a Computation Graph --
+
+Backprop computes derivatives of output with respect to its parameters; by the chain rule, eventually get the deritative of its initial parameter with respect to cost function.
+
+==========================================
+-- Logistic Regression Gradient Descent --
+
+The derivatives of the parameters with respect to the cost function are used to update the parameters (via gradient descent) such that they slowly bring the cost function to its global minimum. This is "training" the neural network: the adjustments to the parameters make the network better and better at a specific task defined by the cost function (the average of the loss functions over m training examples (where the loss function is defined by our training goal; aka what we want the NN to do)).
+
+==========================================
+-- Gradient Descent on m Examples --
+
+The partial derivative for a parameter over m examples is the average derivative for said parameter with respect to the cost function averaged over m examples.
+
+==========================================
