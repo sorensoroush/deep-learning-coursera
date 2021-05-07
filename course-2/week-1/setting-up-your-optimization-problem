@@ -1,0 +1,80 @@
+-- Normalizing Inputs --
+
+Normalization:
+	-Subtract the mean (to make a 0 mean)
+		- mu = (1/m) * sum(X)
+		- X := X - mu
+	-Normalize the variance (divide by standard deviation)
+		- sigma^2 = (1/m) * sum(X ** 2)	[element wise squaring]
+		- X := X / sigma
+
+!- Make sure to use same mu and sigma for test set, if you're normalizing test set
+
+------------------------------------------------------------------------------
+- Why Normalize Inputs? -
+
+If you don't normalize, cost function is typically warped/elongated (if the features have different scales)
+	-Gradient descent takes longer, more oscillating
+If you normalize, the cost function will be more spherical
+	-This is much more optimized for gradient descent
+
+===============================================================================
+-- Vanishing / Exploding Gradients --
+
+?-Refers to very small or very large gradients due to derivative scale; makes training difficult
+
+This occurs in very deep neural networks (contingent on linear activation function though???) where values of z compound to grow exponentially smaller/larger; and therefore the derivatives also grow to be very small/large and gradient descent won't work efficiently with such large magnitudes of scale. 
+
+???-Doesn't this only happen with linear activation functions, because with tanh/sigmoid activation functions the values get re-scaled through every layer?
+
+===============================================================================
+-- Weight Initialization for Deep Networks --
+
+The bigger n is, the larger z will be (because more terms ~ bigger z)
+	-n is the number of input feautres going into a neuron
+
+^- So one way to offset this this is to decrease values of W inversely proportional to the number of input features:
+	- W[l] = np.random.randn((n[l],n[l-1])) * np.sqrt(1/n[n-1])
+		*-If using ReLU activation function, it turns out Var(wi) = 2/n, with 2 in the numerator instead of 1, works better
+		*-Some studies prefer 2/n as well for tanh
+
+*- The variance could be tuned as a hyperparameter; but it's relatively low priority
+
+===============================================================================
+-- Numerical Approximation of Gradients --
+
+(Nudging to both the left and right a miniscule amount)
+	-An improvement to before; taking two-sided difference is a much better approximation vs one-sided difference 
+		-However, this is twice as slow
+
+Numerically double-check the implementation of the derivative by:
+	- (f(theta+epsilon) - f(theta-epsilon))  / (2 * epsilon) ~= f'(theta)
+		-The error is on the scale of O(epsilon^2) [O is some constant]
+
+================================================================================
+-- Gradient Checking --
+
+Reshape W, b into Theta
+Reshape dW, db into dTheta
+
+?- Is dTheta the gradient of J(Theta)?
+
+To implement grad check:
+	for each i:
+		dThetaapprox[i] = ( J(Theta1, Theta2 ..., Thetai + epsilon, ...) - J(Theta1, Theta2 ..., Thetai - epsilon, ...)) / (2 * epsilon) 
+		~= dTheta[i] (partial derivative with respect to cost function J)
+	check ||dThetaApprox - dTheta|| / ||dThetaApprox|| + ||dTheta|| ~= epsilon (typically 10^-7)
+
+================================================================================
+-- Gradient Checking Implementation Notes --
+
+-Do not use during training; only to check if one implementation of backprop is correct (and debug if it isn't)
+-Look at which specific values of i are dThetaApprox far from dTheta, if there is a bug in the implementation
+-Remember to include regularization in dTheta and dThetaApprox calculations
+-Difficult to simultaneously implement with dropout
+	-Cost function J is constantly changing, so it doesn't work well with grad check
+	-Implement grad check without dropout
+-Run at random initialization, and then again after training
+	-This gives time for w and b to wander from 0, and the initial grad check might become inaccurate with larger values of w and b
+
+================================================================================

@@ -1,25 +1,102 @@
 -- Regularization --
 
+-Logistic Regression-
 
+Regularization involves adding a lambda term to the cost function
+	
+L2 regularization (most common):
+	(lambda / (2 * m)) * ||w||^2
+	||w||^2 = [sum of w(j) squared from j=1 to n(x)] = w.T * w
+
+L1 regularization:
+	(lambda / m) * ||w||
+	-W1 will end up being sparse (lots of 0's)
+
+(You could regularize the b term, but in practice this is omitted)
+
+Lambda = regularization parameter
+	-Typically chosen with dev set
+
+---------------------------------------
+
+-Neural Network-
+
+Same as logistic regression but you sum twice:
+	-Square W matrix element-wise, then sum along both columns and rows  
+	-Called the "Frobenius norm", not L2
+
+!Regularization also applies to gradient descent:
+	dw[l] = (backprop) + (lambda / m) * w[l]
+	(Update is identical)
+
+"Weight decay" is also a name for L2 regularization
 
 =======================================
 -- Why Regularization Reduces Overfitting? --
 
+Penalizes w for being high 
+	-Brings the function slightly closer to logistic regression by increasing bias slightly 
+	-Therefore overly complex functions are heavily penalized in the cost function
 
+Another way to think about regularization is incentivising g(z), a function of w, to be linear by bringing it towards the "middle" of the tanh function (forcing z to take on a small range of values)
+	-This way every layer is roughly linear 
+
+!A way to debug gradient descent descent is to plot:
+	-Cost as a function of iterations, to ensure that cost is constantly decreasing
 
 =======================================
 -- Dropout Regularization --
 
+Concept: 
+	-Independently for every training example and iteration, randomly remove nodes with 0.X pre-deteremined probability to do so per node, and compute using the reduced neural network (both forward and backward)
 
+Implementation:
+	Layer = 3, keep-prob = 0.8
+	d3 = np.random.rand(a3.shape[0],a3.shape[1]) < keep-prob
+	a3 = np.multiply(a3,d3) = a3 * d3
+	a3 /= keep-prob
+		-This line is what defines the technique as "inverted drop-out"
+			-Less of a scaling problem with this (in training values vs test values)
+
+At test time (making predictions):
+	-No dropout
 
 =======================================
 -- Understanding Dropout --
 
+Intuition:
+	-Every example for every iteration works with a smaller neural network, and this has a regularizing effect
+	-Can't rely on any one feature, so have to spread out weights
+		-Shrink weights (similar to L2; an adaptive form of L2, but the L2 weights for different weights are different)
 
+Also feasible to vary keep-prop per layer (because different layers have different sizes)
+	-The less you worry about overfitting for features of a specific layer, the higher the keep-prop per layer
+	-One downside of this is that you have more hyperparameters to test for
+		-But you could remedy this by specifying per-layer whether drop-out is used at all
+
+Drop-out can also be done for input features, but this is rather uncommon and if used is preferably a high value like 0.9
+
+!Dropout is used for regularization (prevent overfitting), so you don't always need to use it
+	-One downside is that the cost function is not well defined; it's harder to debug gradient descent when the cost function is constantly changing
+		-So if you want the debugging tool, you have to turn drop-out off during the plot test
+
+*- Drop-out is commonly used for computer vision, where massive amounts of data are used (pixels)
 
 =======================================
 -- Other Regularization Methods --
 
+Data Augmentation:
+	-Increase training set size by duplicate training examples via random transformations and distortions
+		-These are somewhat redundant but it is a very time-inexpensive way to get more data
 
+Early Stopping:
+	-Stop training at the minimum dev set error
+		-Essentially you don't give the algorithm time to overfit
+
+	Downside: 
+		-Detracts from the orthogonalization (focusing on >1 goal)
+			-Specifically, you are reducing overfitting at the cost of optimizing the cost function
+	Upside:
+		-Less hyperparameters to deal with (don't need to test for different values of lambda)
 
 =======================================
