@@ -97,12 +97,44 @@ V = [formula] / (1 - beta^t)
 ===============================================================================
 -- Gradient Descent with Momentum --
 
+$- Essentially using moving average with gradients to update parameters
 
+Slower learning in lower variation dimension
+Faster learning in higher variation dimension
+
+Momentum:
+On iteration t:
+	Compute dW, db on current mini-batch
+	Vdw = beta*Vdw + (1-beta)*dW
+	Vdb = beta*Vdb + (1-beat)*db
+	W := W - learning_rate * Vdw
+	b := b - learning_rate * Vdb
+
+!What this does is that is "dampens" oscillations along 0-averaged dimensions
+	-This makes it so that there "momentum" in gradient descent; the new steps are affected by the previous steps
+
+$- Most common beta value: 0.9 (last 10 iterations)
+
+In literature, you will see:
+	Vdw = beta*Vdw + dW
+	-This works, but is less intuitive because it changes the scaling of Vdw/Vdb; and needing to scale the learning rate by 1/(1-beta)
 
 ===============================================================================
 -- RMSprop --
 
+?-Root mean squared prop
 
+On iteration t:
+	Compute dW, db on current mini-batch
+	Sdw = beta*Sdw + (1-beta)dW**2
+	Sdb = beta*Sdb + (1-beta)db**2
+	W := W - learning_rate * (dW / sqrt(Sdw))
+	b := b - learning_rate * (db / sqrt(Sdb))
+
+^Divide by large number to slow gradient descent in oscillating direction
+^Divide by small number to quicken gradient descent in desired direction
+
+This allows for a larger learning_rate without divergence
 
 ===============================================================================
 -- Adam Optimization Algorithm --
