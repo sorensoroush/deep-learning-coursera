@@ -139,16 +139,81 @@ This allows for a larger learning_rate without divergence
 ===============================================================================
 -- Adam Optimization Algorithm --
 
+Initialize:
+	VdW = 0
+	SdW = 0
+	Vdb = 0
+	Sdb = 0
+
+On iteration t:
+	Compute dW, db using current mini-batch
+
+	VdW = beta1*VdW + (1-beta1)*dW	<=== "momentum" beta1
+	Vdb = beta1*Vdb + (1-beta1)*db
+	SdW = beta2*SdW + (1-beta2)*dW**2	<=== "RMSprop" beta2
+	Sdb = beta2*Sdb + (1-beta2)*db**2
+	
+	VdWc = VdW / (1-beta1**t)
+	Vdbc = Vdb / (1-beta1**t)
+	SdWc = SdW / (1-beta2**t)
+	Sdbc = Sdb / (1-beta2**t)
+
+	W := W - alpha*(VdWc / (sqrt(SdWc) + epsilon))
+	b := b - alpha*(Vdbc / (sqrt(Sdbc) + epsilon))
 
 
+Hyperparameters
+	alpha: needs to be tuned
+	beta1: 0.9		(dw)
+	beta2: 0.999	(dW**2)
+	epsilon: 10^-8  (not important)
+
+	What people do:
+		Default values for beta1/beta2 and epsilon
+		Tune alpha
+		(tuning beta1/beta2 is possible but not common)
+	
+Adam:
+	Adaptive moment estimation
+	
 ===============================================================================
 -- Learning Rate Decay --
 
+!Reduce learning rate alpha so that as optimization approaches the minimum, noise as a result of mini-batches will be reduced
 
+1 epoch = 1 pass through the data
+
+Implementation:
+	alpha = alpha0*(1 / (1 + decay_rate * epoch_num))
+
+Example:	(alpha0 = 0.2 ; decay_rate = 1)
+	Epoch | alpha
+	1 | 0.1
+	2 | 0.067
+	3 | 0.05 
+	4 | 0.04
+
+
+Exponential decay:
+	alpha = 0.95**epoch_num * alpha0
+
+Others:
+	alpha = (k / sqrt(epoch_num)) * alpha0
+	alpha = (k / sqrt(t)) * alpha0
+		
+Manual decay is also a thing
+
+
+*In general, tuning decay_rate is relatively low priority
 
 ===============================================================================
 -- The Problem of Local Optima --
 
+In 2-d plots, local optima can be a problem.
+However, in very high dimensional spaces this is not an issue.
+	In a local optimum (derivative is 0) in high dimensional space in a particular dimension (saddle point), there will be progress available in other dimensions. 
+		Hence the algorithm will not get "stuck".
 
+Instead, plateaus (flat areas with very small derivatives) can slow down gradient descent.
 
 ===============================================================================
