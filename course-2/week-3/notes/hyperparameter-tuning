@@ -39,6 +39,17 @@ For beta:
 ===============================================================================
 -- Hyperparameters Tuning in Practice: Pandas vs Caviar --
 
-Remember to retest hyperparameters occassionally; intuitions do get stale (via everyday changes; server upgrades, data size increases, etc.)
+Retest hyperparameters occassionally (once every few months) 
+	Intuitions do get stale (via everyday changes; server upgrades, data size increases, etc.)
+
+Two ways:
+	Babysit one model (panda)
+		Tweak hyperparameters after every day of training
+		-Typically for huge data set, little computational capacity
+
+	Train many models in parallel (caviar)
+		Test many hyperparameter combinations simultaneously
+		
+^This is a function of your computational capacity
 
 ===============================================================================

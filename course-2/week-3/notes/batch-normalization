@@ -1,0 +1,41 @@
+-- Normalizing Activations in a Network --
+
+Normalizing inputs:
+	mu = (1/m) * sum(X)
+	x = x - mu
+	sigma**2 = (1/m) * sum(X**2)
+	x = x / sigma**2
+
+"Can we normalize a[2] so  as to train W[3], b[3] faster?"
+	!Actually normalize z[2], not a[2]
+
+Implement batch norm:
+	For a given layer l:
+		mu = (1/m) * sum(z)
+		sigma**2 = (1/m) * sum(z-mu)
+		z_norm = (z-mu) / sqrt(sigma**2 + epsilon)
+		
+		zt = gamma * z_norm + beta
+			(gamma & beta are learnable parameters of model)
+			gamma is "choosable variance"
+			beta is "choosable mean"
+				can inverse zt term if equals calculated counterparts
+		
+		Use zt instead of z for activation function
+
+===============================================================================
+-- Fitting Batch Norm into a Neural Network --
+
+
+
+===============================================================================
+-- Why does Batch Norm Work? --
+
+
+
+===============================================================================
+-- Batch Norm at Test Time --
+
+
+
+===============================================================================
