@@ -1,0 +1,44 @@
+-- Tuning Process --
+
+Many hyperparameters:
+	!!	alpha (learning_rate)
+	!	beta
+	!	# hidden units
+	!	mini-batch size
+	*	# layers
+	*	learning rate decay
+		beta1, beta2, epsilon	(0.9, 0.999, 10^-8)
+
+!Try random values: don't use a grid
+	Doing this allows for distinct values of each hyperparameter (more data)
+
+!Coarse to fine sampling scheme
+	After finding an area of values that work well, repeat the process in that smaller area (denser value choices)
+===============================================================================
+-- Using an Appropriate Scale to pick Hyperparameters --
+
+!Choosely random values uniformly does not explore various scales of values
+	A range within a scale works for some hyperparameters, but not others
+
+!Search along a log scale!
+
+Example implementation:
+	r = -4 * np.random.rand()
+	alpha = 10^r
+
+Generalized:
+	10^a ... 10^b
+	r e> [a,b]
+	alpha = 10^r
+
+For beta:
+	r e> [-3,-1]
+	1-beta = 10^r
+	beta = 1-10^r
+
+===============================================================================
+-- Hyperparameters Tuning in Practice: Pandas vs Caviar --
+
+Remember to retest hyperparameters occassionally; intuitions do get stale (via everyday changes; server upgrades, data size increases, etc.)
+
+===============================================================================
