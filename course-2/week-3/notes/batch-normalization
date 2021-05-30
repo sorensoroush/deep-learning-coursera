@@ -19,23 +19,92 @@ Implement batch norm:
 			(gamma & beta are learnable parameters of model)
 			gamma is "choosable variance"
 			beta is "choosable mean"
-				can inverse zt term if equals calculated counterparts
+				can inverse zt term if these equals calculated counterparts
 		
 		Use zt instead of z for activation function
 
 ===============================================================================
 -- Fitting Batch Norm into a Neural Network --
 
+Calculation:
+	X ==( w[1] , b[1] )==> z[1]
+	z[1] ==( beta[1] , gamma[1] )==> zt[1]
+	g[1] ==( zt[1] ) ==> a[1]
 
+	a[1] ==( w[2] , b[2] )==> z[2]
+	z[2] ==( beta[2] , gamma[2] )==> zt[2]
+	g[2] ==( zt[2] ) ==> a[2]
+
+
+Parameters:
+	w[1], b[1], w[2], b[2], ... , w[L], b[L]
+	beta[1], gamma[1], beta[2], gamma[2], ... , beta[L], gamma[L]
+
+	!Different beta used in momentum
+		Used because both papers used beta, to respect original paper
+
+!In practice (because of frameworks), we might not need to implement all these details ourselves
+	(~1 line of code)
+	But it is important to know the mechanisms, of course
+
+Implementation (typically in mini-batch):
+	X{1} ==( w[1] , b[1] )==> z[1]
+	z[1] ==( beta[1] , gamma[1] )==> zt[1]
+	g[1] ==( zt[1] ) ==> a[1]
+	... ==> a[L]{1}
+
+	X{2} ==( w[1] , b[1] )==> z[1]
+	z[1] ==( beta[1] , gamma[1] )==> zt[1]
+	... ==> a[L]{2}
+
+Implemented parameters: 
+	w[l], beta[l], gamma[l]
+		!beta and gamma dimensions are (n[1],1)
+	z[l] = w[l]*a[l-1]
+	
+	!If using batch norm, can discard b[l] parameter (essentially set it to always be 0)
+		Ends up being subtracted out by mu in batch norm step (bias is instead decided by beta[l]
+		
+
+Implementing gradient desecent:
+	for t=1 ... numMiniBatches
+		compute forward prop on X{t}
+			in each hidden layer, use BN to replace z[l] with zt[l]
+		use backprop to compute dw[l], dbeta[l], dgamma[l], 
+		update parameters
+			works with momentum, RMSprop, Adam
 
 ===============================================================================
 -- Why does Batch Norm Work? --
 
+-One reason is the same reason normalizing inputs speeds up learning
+-Another reason is that it makes weights later/deeper in your network more resistant to change than earlier on
 
+Covariate shift is a change in data that causes the model to not generalize well to the change in data
+	This was because it wasn't trained on this data
+	!If the distribution of X changes, you might need to retrain your learning algorithm
+		This can occur even if the ground truth function ("Is this a cat or not") does not change
+
+The deeper layers "suffer more change" because their inputs are constantly changing
+	One way to think about this is that shifts in the values in earlier layers affect more intermediate values than shifts in deeper layers
+
+!Batch norm reduces the distribution of hidden values; later values are more stable
+	It also speeds up learning because these deeper layers have less variance to account for
+!Batch norm allows each layer to learn more independently of other layers 
+
+!-Batch norm also has a slight regularization effect 
+	Caused by mean/variance scaled by mini-batch per mini-batch
+		Adds noise to activation values because these values vary from mini-batch to mini-batch
+		*The larger the minibatch size, the less of a regularization effect batch norm has
 
 ===============================================================================
 -- Batch Norm at Test Time --
 
+At test time, we have to calculate mean and variance slightly differently because we don't have a set of training examples to take the mean and variance of, but rather only one example that we want tested
 
+Need to come up with separate estimate for mu and sigma**2
+!^This is done using an exponentially weighted average across mini-batches
+	(This can also be done by calculating the mean and average over the entire training set, but this is not done in practice)
+!So at test time, these weighted averages for mu and sigma**2 are used to calculate z_norm
 
 ===============================================================================
