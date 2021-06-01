@@ -1,10 +1,33 @@
 -- Softmax Regression --
 
+C = # of output classes
 
+"Softmax layer" is what is used to generate non-binary NN outputs
+
+Implementation:
+	z[L] = w[L]*a[L-1] + b[L]
+	t = e**z[L]		# (4,1)
+		(Activation funtion) 
+	a[L] = (e**z[L]) /  (sum(t))
+	a[L](i) = t(i) / (sum(t))
+
+!Essentially:
+	Compute the final output in such a way that it is represented as probabalities of the different classes that sum to 1
+	*This is unusual because it is our first instance of an activation function that inputs and outputs a vector (whereas previously this was always a scalar)
 
 ===============================================================================
 -- Training a Softmax Classifier --
 
+"Hard max" will have a binary multi-class vector output
+"Soft max" will have probabilistic multi-class vector output
+	Generalizes logistic regression to C classes
+		(If C = 2, softmax reduces to logistic regression)
 
+Loss function implementation:
+	loss(y,yhat) = -sum(y*log(yhat))
+		^The loss function will attempt to be as small as possible by making the "correct" yhat as large as possible
+	!y and yhat will be (C,m) dims
+	
+dz[L] = yhat - y
 
 ===============================================================================
