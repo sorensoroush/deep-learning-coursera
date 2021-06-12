@@ -57,6 +57,19 @@ Deep learning has changed standards for data allocations for train/test/dev sets
 =====================================================================================
 -- When to Change Dev/Test Sets and Metrics --
 
+@When your optimizing metric is not correctly rank-ordering your algorithms
+	i.e. miscellaneous ailments of "better" algorithms
+	@A solution to this would be to reevaluate your evaluation metric to better identify said ailments
 
+How to orthogonalize metric optimization:
+	Define a metric to evaluate a classifier (set up target)
+	Optimize algorithm to minimize metric (practice shooting at target)
+
+!If your metric + dev/test set does not perform well on real-world application:
+	Change your dev/test set
+		and/or
+	Change your metric
+
+!It is best to set some starting metric and later change it, rather than fret over making a perfect metric at the start
 
 =====================================================================================

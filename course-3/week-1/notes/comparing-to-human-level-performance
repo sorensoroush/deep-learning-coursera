@@ -1,11 +1,30 @@
 -- Why Human-level Performance --
 
+@ Advances in deep learning makes ML much more feasible/competitive to humans
+@ Workflow is much more efficient when attempting to do something humans can also do
 
+Algorithms tend to slow after surpassing human-level performance
+	Afterwards, it approaches but never reaches the [Bayes optimal error]
+		[]~ best possible error (best possible function mapping x==>y that cannot be surpassed)
+	@ Humans are generally not far from Beyes optimal error
+	@ Tools below human-level performance do not work well above human-level performance
+
+!While an algorithm worse than humans at a task, you can:
+	Get examples from humans (labeled data)
+	Get analysis from humans ("why do I get it right when algorithm doesn't?")
+	Better analysis of bias/variance
+	
+	^After an algorithm surpasses humans, the above tactics work much less well
 
 =====================================================================================
 -- Avoidable Bias --
 
+If there is a significant difference between training error and humans:
+	Focus on reducing bias
+If there is a significant difference between dev error and training error:
+	Focus on reducing variance
 
+^Human-level error as a proxy of Bayes error
 
 =====================================================================================
 -- Understanding Human-level Performance --
