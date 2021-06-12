@@ -32,12 +32,27 @@ We can specify certain metrics as "optimizing metrics" and others as "satisficin
 
 !Purpose of dev set:
 	@To evaluate ideas on training set; so that optimal training can be evaluated on test set
-	*Dev set + eval metric: a target with a ideal optimal (bulls eye)
+	*Dev set + eval metric: a target with an ideal optimal (bulls eye)
+
+!Dev/test sets need to come from the same distribution
+	Randomly shuffle data into dev/test
+	-This is so that the target optimized is appropriate for the goal
+		Large amounts of time can be wasted if this is not done
 
 =====================================================================================
 -- Size of the Dev and Test Sets --
 
+Deep learning has changed standards for data allocations for train/test/dev sets
+	-This is because the scale of data available is much larger in recent years
+	ML Era (m ~< 10^5):
+		70% train, 30% test; 60% train, 20% dev, 20% test
+	DL Era (m ~> 10^6):
+		98% train, 1% dev, 1% test
 
+!If using a test set needs to be big enough to give accurate generalized evaluation of model
+
+*Not using a test set is sometimes ok if you don't care about evaluating your model
+	Not a generally recommended practice
 
 =====================================================================================
 -- When to Change Dev/Test Sets and Metrics --
