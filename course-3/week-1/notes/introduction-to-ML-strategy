@@ -1,0 +1,34 @@
+-- Why ML Strategy --
+
+Why do we need ML strategy?
+	Because there are too many options to improve an algorithm
+		And if one chooses poorly, time will be wasted
+	@Therefore we need a way of methodically narrowing the choices
+
+=====================================================================================
+-- Orthogonalization --
+
+Orthogonalization means that something was designed such that every input affects only one aspect
+	@More specifically: differentiate each dimension to a single input
+	This makes it easier, simpler, and more intuitive for others to achieve a desired effect
+
+!Tune the inputs of a machine learning system so that:
+	Fit training set well on cost function
+		Bigger network
+		Adam/optimizt  	
+		...
+	Fit dev set well on cost function
+		Regularization
+		Bigger training set
+	Fit test set well on cost function
+		Bigger dev set
+	Performs well in real world
+		Change devset or cost function
+
+*A lot of people use early stopping, Andrew doesn't like it
+	Because it's a weird technique to think about
+	@Affects both fitting to training set and dev set 
+		@Not orthogonalized!
+		(fits one better at the cost of the other)
+		
+=====================================================================================

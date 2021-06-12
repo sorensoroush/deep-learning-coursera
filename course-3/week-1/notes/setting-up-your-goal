@@ -1,0 +1,47 @@
+-- Single Number Evaluation Metric --
+
+!Progression in development can be simply measured by creating an accurate single number evaluation metric
+
+Precision:
+	Out of the examples recognized as cats, what % are actually cats?
+Recall:
+	Out of all cat examples, what % are correctly recognized?
+
+^When evaluating these collectively, the F1 score is used
+F1 score = "Average" of P and R
+	= 2 / ((1/p) + (1/r))
+	"Harmonic mean"
+
+!Using a single real number evaluation metric (derived from a dev set) speeds up development iteration
+
+=====================================================================================
+-- Satisficing and Optimizing Metric --
+
+!This is useful when it is not possible to combine various performances into a single metric
+
+We can specify certain metrics as "optimizing metrics" and others as "satisficing metrics"
+	@More specifically, optimize a metric subject to a satisficing metric
+		"Maximize accuracy subject to runningTime < 100ms"
+
+!N metrics:
+	1 optimizing
+	N-1 satisficing
+
+=====================================================================================
+-- Train/Dev/Test Distributions --
+
+!Purpose of dev set:
+	@To evaluate ideas on training set; so that optimal training can be evaluated on test set
+	*Dev set + eval metric: a target with a ideal optimal (bulls eye)
+
+=====================================================================================
+-- Size of the Dev and Test Sets --
+
+
+
+=====================================================================================
+-- When to Change Dev/Test Sets and Metrics --
+
+
+
+=====================================================================================
