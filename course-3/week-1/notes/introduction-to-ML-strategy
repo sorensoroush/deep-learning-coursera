@@ -15,7 +15,7 @@ Orthogonalization means that something was designed such that every input affect
 !Tune the inputs of a machine learning system so that:
 	Fit training set well on cost function
 		Bigger network
-		Adam/optimizt  	
+		Adam/optimization algorithms
 		...
 	Fit dev set well on cost function
 		Regularization

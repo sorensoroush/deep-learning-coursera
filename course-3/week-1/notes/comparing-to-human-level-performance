@@ -26,19 +26,56 @@ If there is a significant difference between dev error and training error:
 
 ^Human-level error as a proxy of Bayes error
 
+Andrew's terminology:
+	"Avoidable bias"
+		human/Bayes error - training_error
+	"Variance"
+		training_error - dev_error
+
 =====================================================================================
 -- Understanding Human-level Performance --
 
+Definition of "human level error" depends on purpose of model
+	"Good enough to surpass an experienced human" 
+		or
+	Proxy for Bayes error ==> a group of experienced humans
 
+*Definition starts to matter when model is very close to human-level performance
 
 =====================================================================================
 -- Surpassing Human-level Performance --
 
+After surpassing human-level performance, avoidable bias becomes vague
 
+This happens most significantly with problems that:
+	Involve structured data (database information)
+	Huge amounts of data (much more than a human would be able to)
+	Not natural perception
 
 =====================================================================================
 -- Improving your Model Performance --
 
+!The two fundamental assumptions of supervised learning
+	The training set can be fit well (low avoidable bias)
+	The training set performance generalizes well to the dev/test set (balanced variance)
 
+!To improve a learning algorithm's performance, either:
+	Reduce avoidable bias error 
+		(human_level_error - training_error)
+	Reduce variance error 
+		(training_error - dev_error
+
+To reduce avoidable bias error, you can:
+	Train bigger model
+	Train longer, or use better optimizatoin algorithms
+		momentum, RMSprop, Adam
+	NN architecture/hyperparameters search
+
+To reduce variance error:
+	More data
+		allows algorithm to better generalize to dev set data
+	Regularization
+		L2, dropout, data augmentation
+	NN architecture/hyperparameters search
 
 =====================================================================================
