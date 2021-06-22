@@ -1,5 +1,76 @@
--- _ --
+-- Training and Testing on Different Distributions --
 
+?There is a dilemna when there is a much smaller data set size of test-favored distribution than readily available datal
+	~10k blurry cat photos ("hard") vs ~200k web-crawled professional cat photos ("easy")
 
+The options are:
+	Combine and shuffle into train vs test (not recommended)
+		Pros:
+			Same distribution
+		Cons:
+			Too many tests on "easy" examples rather than "hard" examples
+
+	All "easy" examples into training (with maybe some "hard" examples), and all dev/test data is "hard" examples
+		Pros:
+			Iterating on results on data of real-world application
+		Cons (not really; better performing):
+			Training distribution is different from dev/test
+
+=====================================================================================
+-- Bias and Variance on Mismatches Data Distributions --
+
+!Not necessarily safe anymore to assume:
+	(train error - dev error = variance)
+		Because the dev set will be inherently more difficult than the train set if the distributions mismatched
+
+!This results in us not being able to tell the difference between
+	The algorithm not having trained on new data (variance)
+	The algorithm not being proficient on hard data
+
+^In order to differentiate the two phenomena, need to define a new set:
+	Training-dev set:
+		Same distribution as training set, but not used for training
+
+^Now, we can define:
+	Variance as:
+		(train error - train-dev error)
+	Data mismatch as :
+		(train-dev error - dev error)
+
+To summarize/reconceptualize:
+	Human level error
+		diff: Avoidable bias
+	Training error
+		diff: Data mismatch
+	Training-dev error
+		diff: Variance
+	Dev error
+		diff: Degree of overfitting to dev set
+	Test error
+
+^*The numbers don't necessarily always ascend
+	It is possible for training data to be more difficult than dev/set data, and therefore have better performances on dev/test data
+
+^*Can also use a table to organize this data:
+	X axis: data distributions
+	Y axis: human level, trained error, not-trained error
+	
+	^Can provide additional insights when organized this way
+
+=====================================================================================
+-- Addressing Data Mismatch --
+
+One thing that could be tried:
+	Carry out manual error analysis to get insight on "what makes dev-data harder"
+		&Noisy cars
+		&Street numbers
+	Try to get more training data that helps algorithm learn to recognize "harder data"
+		&Get more data with noisy cars
+		&Get more data of people speaking numbers
+		
+!The training and dev set can be made more similar with artificial data synthesis
+	&Adding car noises to audio clips
+	!One risk that this runs is that the algorithm can overfit to small data sets of noise
+		1hr noise vs 10000hr audio; can overfit to 1hr of noise
 
 =====================================================================================

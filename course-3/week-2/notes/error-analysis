@@ -1,5 +1,53 @@
--- _ --
+-- Carrying Out Error Analysis --
 
+@ Different ideas of improving your algorithm can be evaluated through small sample sizes of false positives/negatives
+	This can also be described as comparing performance "ceilings"
 
+!~5-10 minutes of "manual" effort of better understanding a model's error can save months of time
+
+!Multiple ideas can undergo error analysis in parallel
+	This can be done in a spreadsheet table: 
+		-Vertically: image examples
+		-Horizontally: example labels
+		*Comments for the table are nice
+
+	^What this can show is what error sources are more prevalent in an algorithm than others
+		And this can show what errors are worth your time to address
+
+=====================================================================================
+-- Cleaning Up Incorrectly Labeled Data --
+
+^This refers to incorrect x ==> y mapping in training/dev/test set data
+
+!If the errors are random (and scale of errors is small), the algorithm will be robust against such errors 
+!If the errors are systematic, the algorithm will learn incorrectly and this will be a problem
+
+@Recommended to add an extra column in error analysis to see if it's incorrectly labeled
+	Comment the reason!
+
+!Three metrics to look at to decide whether or not it is worth fixing incorrectly labeled data:
+	Overall dev set error
+	Errors due to incorrect labels
+	Errors due to other causes
+	^Fix errors that is most optimal to
+
+!Correcting incorrect dev/test set examples:
+	Apply same process to dev/test to make sure same distribution
+	Consider examining examples correctly identified, rather than only incorrect
+		Not always easy to do; because the better the algorithm the more lopsided these two classifications
+	Train and dev/test may come from slightly different distributions
+
+=====================================================================================
+-- Build your First System Quickly, then Iterate --
+
+Goals of building an initial system:
+	Set up dev/test set and metric
+	Build initial system quickly
+	Use bias/variance + error analysis to prioritize next steps
+
+!@Build your first system quickly, than iterate
+	*This applies less strongly if:
+		You have significant prior experience in an application area
+		There is a significant body of literature from which to draw from
 
 =====================================================================================
