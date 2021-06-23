@@ -1,6 +1,6 @@
 -- Training and Testing on Different Distributions --
 
-?There is a dilemna when there is a much smaller data set size of test-favored distribution than readily available datal
+?There is a dilemna when there is a much smaller data set size of test-favored distribution than readily available data
 	~10k blurry cat photos ("hard") vs ~200k web-crawled professional cat photos ("easy")
 
 The options are:

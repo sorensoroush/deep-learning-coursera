@@ -1,10 +1,53 @@
 -- What is End-to-End Deep Learning? --
 
+@Takes multiple stages of pre-processing into a single neural network
 
+A challenge is that it needs a lot of data before it works well
+	> ~10000hr of data
+
+&In a face recognition algorithm (from a camera), it is better to divide into 2 steps:
+	Locate the face in an image
+	Compare the face with other faces on file to see if there it is a match
+
+^Why?
+	Each of the problems are much simpler individually
+	There is data for each of the subtasks
+		Data for each subtasks >>> data for complete functionality
+
+&For machine translation:
+	Best to do end-to-end DL because there is a lot of data for (lang1, lang2) translations
+
+&For child age estimation:
+	Image => bones => age
+		rather than
+	Image ===> age
+	
+	^Because there is not enough data for the end-to-end approach
 
 =====================================================================================
 -- Whether to use End-to-End Deep Learning --
 
+Pros:
+	Lets the data speak
+		Allows ML systems to not be bound to human preconceptions; it might find better approaches on its own
+	Less hand-designed of components needed
+		Simplifies workflow and time efficiency
 
+Cons:
+	May need large amounts of data
+		Specifically (input-end, output-end) data for your task
+	Excludes potentially useful hand-designed components
+		This can speed up learning by injecting human knowledge into the system
+		*Two sources of knowledge:
+			Data
+			Hand-design
+			^If lots of data, hand-design isn't needed
+
+^Hand-designed components are a double edged sword
+	Can hurt, by limiting an algorithm's performance if find better representations than human concepts
+	Can help, by substituting data with human knowledge
+
+!Key question:
+	Do you have sufficient data to learn a function of the complexity needed to map x to y?
 
 =====================================================================================
