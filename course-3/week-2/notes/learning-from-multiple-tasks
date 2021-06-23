@@ -1,10 +1,41 @@
 -- Transfer Learning --
 
+@One of the most powerful ideas in deep learning: 
+	Taking knowledge gained by learning a task (cat recognition) and applying it to another task (x-ray scans)
 
+!What transfer learning involves:
+	@Taking a network that is already trained (image recognition) and repurposing it (radiology diagnosis)
+		If small data set:
+			Only retrain new output layer and its weights+biases
+				Can also add new layers
+		If large data set:
+			Retrain entire network
+				Pretraining: training for original task
+				Fine-tuning: training for repurposed task
+	^The reason this works is that much of the lower-level features generalizes and can be reused for similar tasks
+	
+When does transfered learning make sense?
+	Task A and B have same input
+	There is a lot more data for Task A than Task B
+	Lower level features from Task A could be helpful for Task B
 
 =====================================================================================
 -- Multi-task Learning --
 
+@Having multiple problems to be solved per training example
+	Multiple outputs for each example
+	!It is more efficient to train 1 network to differentiate between 4 tasks than training 4 networks
+		Because the earlier layers generalize between the tasks
+	
+!Unlike softmax, one image can have multiple labels
+
+Can train on data sets without complete labels
+	To do this, only sum over rows with explicit 0/1 label
+
+When does multi-task learning make sense?
+	Training on a set of tasks that can benefit from sharing lower-level features
+	Amount of data you have for each task is very similar (usually)
+	Can train a big enough neural network to do well on all tasks
 
 
 =====================================================================================
