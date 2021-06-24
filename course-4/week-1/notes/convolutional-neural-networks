@@ -1,31 +1,93 @@
 -- Computer Vision --
 
-|
+Previously, we would be doing computer vision problems on very low-resolution images
+	This is done by having every pixel be 3 input features (for 3 color channels)
+
+If we were to take the same approach with high-resolution images:
+	1000x1000 pixel images 	
+	==> 3 million input features
+	==> 3 billion input parameters (if you have the first hidden layer have 1000 nodes: W1 is (3000000,1000)
+
+^As we can see, it would be infeasible to calculate every pixel
+	Therefore, we need to introduce a new idea into our neural networks: convolution operations
 
 =====================================================================================
 -- Edge Detection Example --
 
-|
+!Edge detection is essentially:
+	Image *(convolution)* filter/kernel = convolutional image
+	@Tests for:
+		Light on one side, dark on other (direction/orientation is determined by filter)
+	
+!A convolution is:
+	2d-summation of element-wise multiplication of every instance of a filter size in an image
+		7x7 conv2d 3x3 = 5x5
+		6x6 conv2d 3x3 = 4x4 
+	If there is an edge, the total convolutional image will highlight it
 
 =====================================================================================
 -- More Edge Detection --
 
-|
+In the convolutional image, there is a distinction of "positive" and "negative" edges.
+
+In DL literature there are several different filter designs
+
+!It can be better to let the algorithm figure out the best filter design, rather than using a pre-conceived design
+	This can be done by making each "pixel" of a filter into a trainable parameter
 
 =====================================================================================
 -- Padding --
 
-|
+There are two downsides to the previous conception of applying filters to images:
+	Images shrink on every iteration; eventually will collapse
+	Edge pixels are used relatively infrequently; this is discarding information
+
+!^You resolve both of these by padding:
+	@Adding extra pixels around the image to be convolved on
+
+How much to pad? Two common choices:
+	Valid convolutions:
+		No padding
+	Same convolutions:
+		Pad so that output size is the same as the input size
+
+*Filter size (f) is almost always odd, because:
+	If f is even, need asymmetric padding
+	Odd grids/matrices have centers; this can be useful for talking about filter position
 
 =====================================================================================
 -- Strided Convolutions --
 
-|
+@Convoluting by a specific number of steps, rather than the previous 1 (every pixel position) 
+
+!A strided convolution must have the filter lie entirely within the image region (cannot "hang" outside)
+
+!With:
+	nxn image
+	fxf filter
+	p padding
+	s stride
+
+	The output size will be:
+		floor(((n+2p-f)/s)+1) x floor(((n+2p-f)/s)+1)
+
+*By convention in DL, there is no "flipping" in convolution (technically cross-correlation); despite there being flipping operations in math textbooks
+	In math, mirroring along the origi allows for associativity in sequences of convolutions
+	^But in DL, this is not important so it is omitted
 
 =====================================================================================
 -- Convolutions Over Volume --
 
-|
+!To convolve a 3d image, use a 3d filter
+	Output is 2d
+
+Computationally this is the same, except:
+	f^3 (27 if f=3) numbers are added together, rather than f^2 (9 if f=2)
+
+!This allows for the filter to check for edges for specific colors (or all: grayscale)
+	By convention, image # of channels = filter # of channels
+
+!When wanting to output a feature with multiple edges, desired edges are stacked together (e.g. vertical + horizontal)
 
 =====================================================================================
 -- One Layer of a Convolutional Network --
