@@ -92,26 +92,152 @@ Computationally this is the same, except:
 =====================================================================================
 -- One Layer of a Convolutional Network --
 
-|
+Process:
+	Image
+	===> conv(filter1) ===> ReLU(output + b1) ===> output
+	===> conv(filter2) ===> ReLU(output + b2) ===> output
+	======> 2channel_output
+
+!One enormous advantage of CNNs is that layer parameters are not determined by image size, only filter number and size
+
+If layer l is a convolution layer:
+	f[l] = filter size
+	p[l] = padding
+	s[l] = stride
+	nc[l] = number of filters
+
+	Each filter is: f[l] * f[l] * nc[l-1]
+	Activations: a[l] --> nh[l] * nw[l] * nc[l] 
+		A[l] --> m * nh[l] * nw[l] * nc[l] 
+	Weights: f[l] * f[l] * nc[l-1] * nc[l]
+	Bias: nc[l]
+
+	input: nh[l-1] * nw[l-1] * nc[l-1]
+	output: nh[l] * nw[l] * nc[l]
+
+	n[l] = floor(((n[l-1] + 2*p[l] - f[l]) / s[l]) + 1)
+	^Calculate this separately for height (nh) and width (nw) 
 
 =====================================================================================
 -- Simple Convolutional Network Example --
 
-|
+Example ConvNet:
+	x = 39 * 39 * 3
+	nh[0] = nw[0] = 39
+	nc[0] = 3
+		f[1] = 3
+		s[1] = 1
+		p[1] = 0 (valid)
+		10 filters
+
+	a[1] = 37 * 37 * 10
+	nh[1] = nw[1] = 37
+	nc[1] = 10
+		f[2] = 5
+		s[2] = 2
+		p[2] = 0 (valid)
+		20 filters
+
+	a[2] = 17 * 17 * 20
+	nh[2] = nw[2] = 17
+	nc[2] = 20
+		f[3] = 5
+		s[3] = 2
+		p[3] = 0 (valid)
+		40 filters
+	
+	a[3] = 7 * 7 * 40
+	===> unroll this into 1960d vector
+	===> logistic/softmax activation
+	===> yh
+
+^As we can see, generally:
+	Height/width steadily decreases
+	Channel # steadily increases
+
+!Types of layers in CNN:
+	Convolution (conv)
+	Pooling (pool)
+	Fully connected (fc)
 
 =====================================================================================
 -- Pooling Layers --
 
-|
+Max pooling:
+	4x4 ==> 4 2x2s
+	Take the max of each 2x2
+	Output a 2x2 with each max
 
+	@Filtering with hyperparameters:
+		f = 2
+		s = 2
+
+	!What this does:
+		Detect features of high interest in each region
+
+	!Pooling layers have no parameters to learn
+	!Pooling uses the same formula as convolution outputs
+
+Average pooling:
+	!Not commonly used, with one exception:
+		Deep in a network, average pooling to collapse representations
+	@Does what you expect:
+		Averages every region instead of taking max
+
+!Hyperparameters of pooling:
+	f: filter size
+	s: stride
+	Max or average pooling
+		
 =====================================================================================
 -- CNN Example --
 
-|
+!Two conventions with CNN layer scheme:
+	conv and pool are separate layers
+	conv and pool are one layer
+
+	@Because pooling has no parameters/weights, we will use the convention of calling conv+pool one layer
+
+Example: (inspired by LeNet-5)
+	32x32x3 image input
+		convolution:
+			f = 5
+			s = 1
+			6 filters
+	28x28x6 conv1
+		pooling:
+			max
+			f = 2
+			s = 2
+	14x14x6 pool1
+		convolution:
+			f = 5
+			s = 1
+			10 filters	
+	10x10x16 conv2
+		pooling:
+			max
+			f = 2
+			s = 2
+	5x5x16 pool2
+		flatting:
+			400d vector
+	120-unit FC3
+		W[3] = (120,400)
+		b[3] = (120,1)
+	84-unit FC4
+		W[4] = (84,120)
+		b[4] = (84,1)
+	Softmax (10 outputs)
 
 =====================================================================================
 -- Why Convolutions? --
 
-|
+Two main advantages of convolutional layers:
+	Parameter sharing
+		!@A feature that's useful in one part of the image is probably useful in other parts of the image
+	Sparsity of connections
+		!@In each layer, each output value only depends on a small number of inputs (outputs are localized)
+			~Opposite corners of an image have nothing to do with each other; but with traditional NNs they are treated as so
 
 =====================================================================================
