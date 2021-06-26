@@ -33,7 +33,7 @@ In the convolutional image, there is a distinction of "positive" and "negative" 
 In DL literature there are several different filter designs
 
 !It can be better to let the algorithm figure out the best filter design, rather than using a pre-conceived design
-	This can be done by making each "pixel" of a filter into a trainable parameter
+	!This can be done by making each "pixel" of a filter into a trainable parameter
 
 =====================================================================================
 -- Padding --
@@ -71,7 +71,7 @@ How much to pad? Two common choices:
 	The output size will be:
 		floor(((n+2p-f)/s)+1) x floor(((n+2p-f)/s)+1)
 
-*By convention in DL, there is no "flipping" in convolution (technically cross-correlation); despite there being flipping operations in math textbooks
+*By convention in DL, there is no filter "flipping" in convolution (technically cross-correlation); despite there being flipping operations in math textbooks
 	In math, mirroring along the origi allows for associativity in sequences of convolutions
 	^But in DL, this is not important so it is omitted
 
@@ -233,11 +233,21 @@ Example: (inspired by LeNet-5)
 =====================================================================================
 -- Why Convolutions? --
 
-Two main advantages of convolutional layers:
+!Two main advantages of convolutional layers:
 	Parameter sharing
 		!@A feature that's useful in one part of the image is probably useful in other parts of the image
 	Sparsity of connections
 		!@In each layer, each output value only depends on a small number of inputs (outputs are localized)
 			~Opposite corners of an image have nothing to do with each other; but with traditional NNs they are treated as so
+	
+	^Through these two mechanisms, a neural network has:
+		Fewer parameters to train
+		Less reliance on large training sets
+		Less prone to overfitting
+	
+!CNNs are also translation invariance
+	Meaning rotations/translations do not affect outputs
+
+!Best to try tested conv/pool hyperparameters found in literature than to experiment
 
 =====================================================================================
