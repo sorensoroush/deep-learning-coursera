@@ -1,49 +1,167 @@
--- _ --
+-- Why Look at Case Studies? --
+
+@Reading or seeing other good examples of convnets is a good way to gain intuition about how to build convnets
+
+=====================================================================================
+-- Classic Networks --
+
+LeNet-5 (1998):
+	![LeCun et al., 1998, Gradient-based learning applied to document recognition]
+	Size:
+		32x32x1 (grayscale images, 1998)
+	Goal:
+		Recognize hand-written digits
+	Architecture:
+		32x32x1
+		==(conv)==> c=6, f=5, s=1
+		28x28x6
+		==(avg pool)==> f=2, s=2
+		14x14x6
+		==(conv)==> c=16, f=5, s=1
+		10x10x16
+		==(avg pool)==> f=2, s=2
+		5x5x16 = 400
+		==(FC)==> 120 units
+		==(FC)==> 84 units
+		==(output)==> 10 outputs
+
+	^Notes:
+		Avg pooling was more popular
+		Padding wasn't used, was always "valid" padding
+		Used binaryx10 classifier (not softmax)
+
+	Observations:	
+		60k parameters (small by modern standards)
+		As depth increases:
+			height/width decreases
+			channel# increases
+		Conv+pool conv+pool FC FC output
+	Advanced (if interested in reading paper):
+		Used sigmoid/tanh rather than ReLU
+		Filter stacking was rather complicated due to computational limitations
+		Non-linearity after pooling
+		Most of the information is in sections 2+3
+		Later sections talk about other ideas not applicable to today
+
+AlexNet (2012):
+	![Krizhevsky et al, 2012. ImageNet classification with deep convolutional neural networks]
+	Goal:
+	Architecture:
+		227x227x3 input
+		==(conv)==> c=96, f=11, s=4
+		55x55x96
+		==(max pool)==> f=3, s=2
+		27x27x96
+		==(conv)==> c=256, f=5, s=1, padding='same'
+		27x27x256
+		==(max pool)==> f=3, s=2
+		13x13x256
+		==(conv)==> c=384, f=3, s=1, padding='same'
+		13x13x384
+		==(conv)==> c=384, f=3, s=1, padding='same'
+		13x13x384
+		==(conv)==> c=256, f=3, s=1, padding='same'
+		13x13x256
+		==(max pool)==> f=3, s=2
+		6x6x256 = 9216
+		==(FC)==> 4096 units
+		==(FC)==> 4096 units
+		==(softmax)==> 1000 outputs
+	
+	Observations:
+		Similiar to LeNet but much bigger
+			(60k parameters vs 60M parameters)
+		ReLU was used
+
+	Advanced:
+		Layers were split among multiple GPUs
+		Another kind of layer called "Local Response Normalization"
+			Look across the channels and normalize them
+			Researchers later realized this doesn't improve performance
+	
+	!This was the paper that convinced the computer vision community of the potential of deep learning
+
+
+VGG-16 (2015):
+	[Simonyan & Zisserman 2015. Very deep convolutional networks for large-scale image recognition]
+	"Instead of hyperparameter overload let's make it simple"
+	==(conv)==> f=3, s=1, padding='same'
+	==(max pool)==> f=2, s=2
+	Architecture:
+		224x224x3
+		==(conv x2)==> c=64
+		224x224x64
+		==(pool)==>
+		112x112x64
+		==(conv x2)==> c=128
+		112x112x128
+		==(pool)==>
+		56x56x128
+		==(conv x3)==> c=256
+		56x56x256
+		==(pool)==>
+		28x28x256	
+		==(conv x3)==> c=512
+		28x28x512	
+		==(pool)==>
+		14x14x512
+		==(conv x3)==> c=512
+		14x14x512
+		==(pool)==>
+		7x7x512
+		==(FC)==> 4096 units
+		==(FC)==> 4096 units
+		==(softmax)==> 1000 outputs
+
+	Observations:
+		~138M parameters
+			large even by modern standards
+		Appealing due to architectural simplicity and uniformity (no hyperparameter overload)
+		Doubling of filter#
+	
+	Advanced:
+		VGG-19 is mentioned, a bigger version of this
+
+=====================================================================================
+-- ResNets --
+
+Built from Residual Blocks:
+	Essentially an earlier activation being added to a later pre-activation
+		a[l+2] = g(z[l+2] + a[l])
+		Called "shortcuts" or skip connections
+
+=====================================================================================
+-- Why ResNets Work? --
 
 |
 
 =====================================================================================
--- _ --
+-- Networks in Networks and 1x1 Convolutions --
 
 |
 
 =====================================================================================
--- _ --
+-- Inception Network Motivation --
 
 |
 
 =====================================================================================
--- _ --
+-- Inception Network --
 
 |
 
 =====================================================================================
--- _ --
+-- MobileNet --
 
 |
 
 =====================================================================================
--- _ --
+-- MobileNet Architecture --
 
 |
 
 =====================================================================================
--- _ --
-
-|
-
-=====================================================================================
--- _ --
-
-|
-
-=====================================================================================
--- _ --
-
-|
-
-=====================================================================================
--- _ --
+-- EfficientNet --
 
 |
 
