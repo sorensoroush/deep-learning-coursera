@@ -130,20 +130,106 @@ Built from Residual Blocks:
 		a[l+2] = g(z[l+2] + a[l])
 		Called "shortcuts" or skip connections
 
+To turn a "plain" network into resnet:
+	Stack residual blocks
+		@Fastforward the input of a layer into the l+2 activation; repeat in sequence	
+
+In a plain network:
+	Training error eventually increases as layer# increases
+		This occurs because the optimization algorithm has difficulty training a network that is too deep
+
+In a ResNet:
+	Training error will not increase with depth
+		The residual blocks relieves the algorithm of vanishing gradients
+
 =====================================================================================
 -- Why ResNets Work? --
 
-|
+a[l+2] = g(w[l+2] * a[l+1] + b[l+2] + a[l])
+	If w and b vanish to 0:
+		a[l+2] = g(a[l])
 
+^Similar in concept to adding epsilon to denominator of optimization algorithm:
+	Adds a "backup" value so gradients aren't near-zero
+
+The identity function is easy for the network to learn, as a backup
+	Gets the added benefit of a deeper network without the liability of vanishing gradients
+		"It never hurts, it can only help"
+		Whereas deep plain nets will struggle to learn anything, even the identity function
+
+!ResNets are contingent on matching dimensions inside residual blocks
+	As a result "same" convolutions are commonly used inside a network to allow for residual blocks
+	!If the dimensions are not matching:
+		Implement Ws to be multiplied to a[l] before adding it to z[l+2]
+			Ws could be a matrix of parameters to be learned
+			Ws could be a fixed matrix to bad a[l] with zeros
+	
 =====================================================================================
 -- Networks in Networks and 1x1 Convolutions --
 
-|
+Does exactly what you expect with an FxFx1 input:
+	Simple multiplication; not very useful
+
+With an FxFxc input:
+	A 1x1xc filter acts as a "network in network"; could be called a sort of FC layer
+		Takes the # of channels and maps them to a single value
+	FxFxc ==(1x1xc x #f)==> FxFx#f
+
+1x1 convolutions are good for:
+	Maintaining height and width 
+		while
+	Shrinking # of channels
+	(If # of channels are maintained, functions to add a layer of non-linearity (complexity))
+
+	Allows to save on computation in some networks
 
 =====================================================================================
 -- Inception Network Motivation --
 
-|
+Inception Network Layer:
+	"Let's do them all at the same time!"
+		Let the network learn what it wants
+	Stacked together:
+		1x1 convolution
+		3x3 (same) convolution
+		5x5 (same) convolution
+		Max-pool (same; s=1)
+			Very unusual pooling in order to make dimensions match
+	28x28x192 ==> 28x28x256
+
+^This is very computationally expensive:
+	The 5x5 convolution alone:
+		28x28x32 output volume
+		x
+		5x5x192 sized filters
+		=
+		120M multiplications
+
+To reduce 5x5 conv computation:
+	28x28x192
+	==(1x1 conv, #f=16, 1x1x192)==>
+	28x28x16 ("bottleneck layer")
+	==(5x5 conv, #f=32, 5x5x16)==>
+	28x28x32
+
+	First conv is:
+		28x28x16
+		x	
+		192
+		=
+		2.4M multiplations
+	
+	Second conv is:
+		28x28x32
+		x
+		5x5x16
+		=
+		10M multiplcations
+
+	= 12.4 multiplications
+		(this is 1/10th of the original)
+
+@As long as the this bottleneck is implemented, inception networks do not hurt performance
 
 =====================================================================================
 -- Inception Network --
