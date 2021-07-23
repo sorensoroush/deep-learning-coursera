@@ -125,6 +125,7 @@ VGG-16 (2015):
 =====================================================================================
 -- ResNets --
 
+[He et al., 2015. Deep residual networks for image recognition]
 Built from Residual Blocks:
 	Essentially an earlier activation being added to a later pre-activation
 		a[l+2] = g(z[l+2] + a[l])
@@ -167,6 +168,7 @@ The identity function is easy for the network to learn, as a backup
 =====================================================================================
 -- Networks in Networks and 1x1 Convolutions --
 
+[Lin et al., 2013. Network in network]
 Does exactly what you expect with an FxFx1 input:
 	Simple multiplication; not very useful
 
@@ -186,6 +188,7 @@ With an FxFxc input:
 =====================================================================================
 -- Inception Network Motivation --
 
+[Szegedy et al. 2014. Going deeper with convolutions]
 Inception Network Layer:
 	"Let's do them all at the same time!"
 		Let the network learn what it wants
@@ -234,21 +237,114 @@ To reduce 5x5 conv computation:
 =====================================================================================
 -- Inception Network --
 
-|
+Inception module:
+	Previous activation (28x28x192)
+	Four step in parallel:
+		1x1 conv
+			output: 28x28x64
+		3x3 conv
+			preceded by: 
+				1x1 conv (96 filters)
+			output: 28x28x128
+		5x5 conv
+			preceded by: 
+				1x1 conv (16 filters)
+			output: 28x28x32
+		Maxpool (3x3, s=1, 'same')
+			proceeded by:
+				1x1 conv (32 filters)
+			output: 28x28x32
+	Four steps concatenation (28x28x256)
+
+!An inception network is essentially a chain of inception modules
+	*There are also "side branches" in the noted research paper:
+		Essentially FC layers stemming off of different depths followed by a softmax output
+		These ensure that the intermediate features themselves are good for predictions
+
+*The name "inception network" literally comes from the meme
 
 =====================================================================================
 -- MobileNet --
 
-|
+[Howard et al. 2017, MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications]
+Motivation:
+	Computationally inexpensive
+	Useful for mobile applications
+
+Key idea:
+	Depthwise separable convolutions are less computationally expensive than normal computations
+
+Normal convolution computational cost:
+	#filter params x #filter positions x #filters
+	3x3x3 x 4x4 x 5
+	= 2160
+	(dimensions of filters x dimensions of output volume)
+	
+
+Depthwise separable convolution (2 steps):
+	Depthwise convolution:
+		Individually convolve every	n_C dimension along the input volume 
+	Pointwise convolution:
+		Take n_C' (5) filters (1x1x3) and convolve them along intermediate volume
+
+Depthwise separable convolution computation cost:
+	Depthwise convolution:
+		#filter params x #filter positions x #filters
+		3x3 x 4x4 x 3
+		= 432
+		?(Essentially splitting the filter dimensions into their own filters?)
+	Pointwise convolution:
+		#filter params x #filter positions x #filters
+		1x1x3 x 4x4 x 5
+		= 240
+	= 672
+		
+The ratio of depthwise separable convolution to normal convolution:
+	= (1/n_C') + (1/f**2)
 
 =====================================================================================
 -- MobileNet Architecture --
 
-|
+[Sandler et al. 2019, MobileNetV2: Inverted Residuals and Linear Bottlenecks]
+
+MobileNet v1 repeats ds conv layers 13 times (followed by pool, fc, softmax)
+
+MobileNet V2 repeats dsconv layers 17 times, with two main changes to the architecture:
+	Residual connection from input to output of ds convo layer
+	Adds an "expansion" operation to the depthwise and projection operations
+		Called a "bottleneck" block
+	
+!MobileNet V2 bottleneck
+	nxnx3 input
+		(residual connection)
+	expansion operation:
+		18 1x1x3 filters
+		outputs: nxnx8
+		(typically a factor of 6 is used)
+	depthwise convolution:
+		outputs: nxnx18
+	pointwise convolution:
+		3 1x1x18 filters
+		outputs: nxnx3
+	nxnx3 output
+
+Bottleneck blocks accomplish two things:
+	expansion allows for more parameters to be learned, which is ideal in neural networks
+	projection allows for a more compact output, which is ideal for limited-memory devices
 
 =====================================================================================
 -- EfficientNet --
 
-|
+[Tan and Le, 2019, EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks]
+EfficientNet gives us a way to automatically scale up or down networks according to unique computation capacities
+
+There are three variables to scale networks up/down are:
+	Image resolution (r)
+	Network depth (d)
+	Layer width (w)
+
+What are the rates these variables are to be scaled with computational budgets?
+
+!^If wanting to implement EfficientNet, look up open source implementations
 
 =====================================================================================
