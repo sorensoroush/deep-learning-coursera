@@ -34,7 +34,7 @@ If you have even more training data, you can:
 -- Data Augmentation --
 
 With computer vision specifically, there is no such thing as "too much data"
-	Not necessarily true for all practices of computer vision
+	Not necessarily true for all practices of machine learning
 
 Common data augmentation techniques:
 	Mirroring 

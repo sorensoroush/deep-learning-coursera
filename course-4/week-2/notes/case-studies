@@ -163,7 +163,7 @@ The identity function is easy for the network to learn, as a backup
 	!If the dimensions are not matching:
 		Implement Ws to be multiplied to a[l] before adding it to z[l+2]
 			Ws could be a matrix of parameters to be learned
-			Ws could be a fixed matrix to bad a[l] with zeros
+			Ws could be a fixed matrix to pad a[l] with zeros
 	
 =====================================================================================
 -- Networks in Networks and 1x1 Convolutions --
@@ -307,7 +307,7 @@ The ratio of depthwise separable convolution to normal convolution:
 
 [Sandler et al. 2019, MobileNetV2: Inverted Residuals and Linear Bottlenecks]
 
-MobileNet v1 repeats ds conv layers 13 times (followed by pool, fc, softmax)
+MobileNet v1 repeats dsconv layers 13 times (followed by pool, fc, softmax)
 
 MobileNet V2 repeats dsconv layers 17 times, with two main changes to the architecture:
 	Residual connection from input to output of ds convo layer
