@@ -6,6 +6,8 @@ Some of them have even been pretrained, ready for transfered learning
 =====================================================================================
 -- Transfer Learning --
 
+Softmax layer is typically refined during transfered learning
+	Default is 1000 layers
 
 
 =====================================================================================
