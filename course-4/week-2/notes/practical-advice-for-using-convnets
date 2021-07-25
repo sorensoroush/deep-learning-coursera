@@ -6,18 +6,102 @@ Some of them have even been pretrained, ready for transfered learning
 =====================================================================================
 -- Transfer Learning --
 
-Softmax layer is typically refined during transfered learning
+Softmax layer is typically redefined during transfered learning
 	Default is 1000 layers
 
+Rest of the network is "frozen"
+	No need to train them because they've already been trained
+
+One thing that could be done with "frozen" layers:
+	Precompute the activations for the "frozen" layers, save to disk, and then train the softmax layer with those activations
+
+If you have a lot of training data, you can:
+	Freeze fewer layers, and train more layers
+		Could either:
+			Use the pre-initialized weights and train that
+			Initialize weights from scratch
+
+If you have even more training data, you can:
+	Retrain the entire network
+
+!In practice, because open source pre-trained networks are high quality and open source data sets are enormous:
+	Use pre-trained networks as initialization
+	!Transfered learning always recommended unless:
+		You have an exceptionally large data set
+		You have a large computational budget
 
 =====================================================================================
 -- Data Augmentation --
 
-|
+With computer vision specifically, there is no such thing as "too much data"
+	Not necessarily true for all practices of computer vision
+
+Common data augmentation techniques:
+	Mirroring 
+		Reflection along vertical axis
+	Random cropping 
+		Taking random "chunks" of an image
+		Have to be careful about cropping subsets not containing the data item
+	Color shifting
+		Adding RGB values from a random distribution
+			Mimicks different lighting
+		*PCA color augmentation shifts color relative to the image colors 
+			If lots of GB and little R, subtracts lots of GB and little R
+			Talked about in the AlexNet paper
+
+Less common techniques:
+	Rotation
+	Shearing
+	Local warping
+	@Less common perhaps due to the complexity
+
+Implementing distortings during training:
+	Images saved on hard disk
+
+	CPU thread loads images and distorts them, sorts into minibatches
+	CPU/GPU gets distortions and passes them to train
+	
+	^These two can often run in parallel
+
+*There are also hyperparameters to consider:
+	How to random crop
+	How much to color shift
+
+There are also open source implementations for data augmentation
 
 =====================================================================================
 -- State of Computer Vision --
 
-|
+There is a spectrum among machine learning applications for the amount of data that is available for the corresponding tasks:
+	Speech recognition: large
+		simple task: sequential data
+	Image recognition: substantial
+		relatively complex to take pixels and ask "is this X or not"
+	Object detection: mediocre
+		very complex and precise to detect both presence and location (drawing bounding boxes)
+
+There are two sources of knowledge that an algorithm can draw from:
+	Labeled data
+	Hand-engineering (features, network architecture, other components)
+
+!The less data that is available, the more the algorithm has to draw from hand-engineering
+	Conversely, the more data that is available the less hand-engineering is required
+	@There are also more "hacks" needed, like transfered learning
+	*Historically computer vision tasks has had to rely on a lot of hand-engineering because of this lack of data
+
+There are techniques are used exclusively for benchmarks/competitions, where every +1% is valuable
+	These aren't really used for production as it is an inefficient use of time / computational resources
+They are:
+	Ensembling
+		Train networks independently (typically 3-15) and average yhat results
+			This eats up memory because of needing to retain multiple networks
+	Multi-crop at test time
+		Run classifier on multiple versions of test images and average results
+			The "10-crop" is a technique for this
+
+Open source is very nice:
+	Literature-published network architectures
+	Implementations with hyperparameters optimized
+	Pre-trained models
 
 =====================================================================================
