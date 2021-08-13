@@ -1,0 +1,110 @@
+-- Object Localization --
+
+Image classification:
+	Labeling image as "car"
+
+Classification with localization:
+	Label + bounding box of "car"
+	"Where in the image is the label"
+
+Detection:
+	Detect and label objects with bounding boxes
+	"What is in the image and where"
+
+----
+
+Image coordinates:
+	(0,0) - upper left
+	(1,1) - lower right
+
+Classification with localization has multiple outputs:
+	Softmax (for label)
+	Bounding box parameters:
+		bx - horizontal midpoint
+		by - vertical midpoint
+		bh - height of box
+		bw - width of box
+
+---
+Defining target label y: (classification with localization; assumes only 1 object)
+	[pc, bx, by, bh, bw, c1, c2, c3]
+	pc - probability that there is an object
+		if pc=0, we "don't care" about the rest of the values
+
+L(yh,y) = 
+	[if y1=1]
+		(y1h-y1)**2 + (y2h-y2)**2 + ... + (y8h-y8)**2
+	[if y1=0]
+		(y1h-y1)**2
+
+^*This is simplified, typically:
+	Log-like feature loss for c1-3
+	Squared error loss for box parameters
+	Logistics regression loss for softmax (squared error is probably ok too)
+
+=====================================================================================
+-- Landmark Detection --
+
+
+
+=====================================================================================
+-- Object Detection --
+
+|
+
+=====================================================================================
+-- Convolutional Implementation of Sliding Window --
+
+|
+
+=====================================================================================
+-- Bounding Box Predictions --
+
+|
+
+=====================================================================================
+-- Intersection Over Union --
+
+|
+
+=====================================================================================
+-- Non-max Suppression --
+
+|
+
+=====================================================================================
+-- Anchor Boxes --
+
+|
+
+=====================================================================================
+-- YOLO Algorithm --
+
+|
+
+=====================================================================================
+-- Region Proposals --
+
+|
+
+=====================================================================================
+-- Semantic Segmentation with U-Net --
+
+|
+
+=====================================================================================
+-- Transpose Convolutions --
+
+|
+
+=====================================================================================
+-- U-Net Architecture Intuition --
+
+|
+
+=====================================================================================
+-- U-Net Architecture --
+
+|
+
+=====================================================================================
