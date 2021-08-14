@@ -45,17 +45,69 @@ L(yh,y) =
 =====================================================================================
 -- Landmark Detection --
 
-
+Landmarks are specific points in a label (like a person's face)
+Output looks like:
+	face?
+	l1x
+	l1y
+	...
+	l64x
+	l64y
+	
+	^This is laboriously hand-labeled points 
+		(e.g. along a persons eye, nose, mouth; in order to detect emotions or locations for functions)
+		(e.g. along a person's body to detect their pose)
 
 =====================================================================================
 -- Object Detection --
 
-|
+First step is to train a conv net with:
+	Zoomed in pictures of cars / not cars as data
+
+Next slide a window with some stride across an image and:
+	Have every window fed into the conv net to detect whether there's a car or not
+^Repeat this but with slightly larger window
+^Maybe repeat this a third time with an even larger window
+
+!^This is very computationally inefficient:
+	Running sliding windows with convolutions is very slow and computationally expensive
+		Run with coarse stride to reduce calculations and performance is hurt
+		Run with fine stride and the algorithm runs too slow
 
 =====================================================================================
 -- Convolutional Implementation of Sliding Window --
 
-|
+It is possible to turn FC layers into convolutional layers:
+	Instead of flatting input volume for FC layers:
+		14x14x3 (input) 
+			5x5x3 * 16 (filters) [Conv]
+		10x10x16
+			2x2 [MaxPool]
+		5x5x16 
+			5x5x16 * 400 (filters) [FC]
+		1x1x400
+			1x1x400 * 400 (filters) [FC]
+		1x1x400
+			1x1x400 * 4 (filters) [FC]
+		1x1x4 (output)
+
+[Sermanet et al., 2014, OverFeat: Integrated recognition, localization and detection using convolutional networks]
+
+!^This allows you to run checks on smaller regions through big regions with only 1 pass:
+	This looks something like:
+		28x28x3 (input) 
+			5x5x3 * 16 (filters) [Conv]
+		24x24x16
+			2x2 [MaxPool]
+		12x12x16 
+			5x5x16 * 400 (filters) [FC]
+		8x8x400
+			1x1x400 * 400 (filters) [FC]
+		8x8x400
+			1x1x400 * 4 (filters) [FC]
+		8x8x4 (output)
+
+^This checks for the object within the 64 windows simultaneously
 
 =====================================================================================
 -- Bounding Box Predictions --
